@@ -42,8 +42,7 @@ class Instance:
       elif cmd=="lef":retval=(1 if float(command[1])<=float(command[2]) else 0)
       elif cmd=="gtf":retval=(1 if float(command[1])>float(command[2]) else 0)
       elif cmd=="gef":retval=(1 if float(command[1])>=float(command[2]) else 0)
-      elif cmd=="int":retval=int(command[1])
-      elif cmd=="float":retval=float(command[1])
+      elif cmd=="int":retval=int(float(command[1]))
       elif cmd=="if":
         if len(command)==3:
           if _istrue((output:=this._execute(command[1],scope))):
@@ -110,7 +109,7 @@ class Instance:
       return buffer_stack.pop()
     for c in S+"\n":
       assert len(symbol_stack)+1==len(buffer_stack)
-      elif c in "[({<":
+      if c in "[({<":
         symbol_stack.append(c)
         buffer_stack.append("")
         if c=="{":curly_mode+=1
