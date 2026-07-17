@@ -1,6 +1,7 @@
 # TINT (TINT Is Not Tcl)
 # A simple scripting language with Tcl-based syntax
 #fmt: off
+import math
 def _istrue(S):
     t=S[1]
     return t!="0" and t!=""
@@ -26,11 +27,11 @@ class Instance:
           self.globals[command[1]]=command[2]
         else:
           self.variables[command[1]]=command[2]
-      elif cmd=="add":retval=sum([int(i) for i in command[1:]])
-      elif cmd=="sub":retval=int(command[1])-int(command[2])
-      elif cmd=="mul":retval=int(command[1])*int(command[2])
-      elif cmd=="div":retval=int(command[1])//int(command[2])
-      elif cmd=="mod":retval=int(command[1])%int(command[2])
+      elif cmd=="+":retval=sum([int(i) for i in command[1:]])
+      elif cmd=="-":retval=int(command[1])-int(command[2])
+      elif cmd=="*":retval=int(command[1])*int(command[2])
+      elif cmd=="/":retval=int(command[1])//int(command[2])
+      elif cmd=="\45":retval=int(command[1])%int(command[2])
       elif cmd=="lt":retval=(1 if int(command[1])<int(command[2]) else 0)
       elif cmd=="le":retval=(1 if int(command[1])<=int(command[2]) else 0)
       elif cmd=="gt":retval=(1 if int(command[1])>int(command[2]) else 0)
@@ -43,16 +44,20 @@ class Instance:
       elif cmd=="len":retval=len(command[1])
       elif cmd=="index":retval=command[1][int(command[2])]
       #floating pointies
-      elif cmd=="addf":retval=sum([float(i) for i in command[1:]])
-      elif cmd=="subf":retval=float(command[1])-float(command[2])
-      elif cmd=="mulf":retval=float(command[1])*float(command[2])
-      elif cmd=="divf":retval=float(command[1])/float(command[2])
-      elif cmd=="modf":retval=float(command[1])%float(command[2])
+      elif cmd=="+f":retval=sum([float(i) for i in command[1:]])
+      elif cmd=="-f":retval=float(command[1])-float(command[2])
+      elif cmd=="*f":retval=float(command[1])*float(command[2])
+      elif cmd=="/f":retval=float(command[1])/float(command[2])
+      elif cmd=="\45f":retval=float(command[1])%float(command[2])
       elif cmd=="ltf":retval=(1 if float(command[1])<float(command[2]) else 0)
       elif cmd=="lef":retval=(1 if float(command[1])<=float(command[2]) else 0)
       elif cmd=="gtf":retval=(1 if float(command[1])>float(command[2]) else 0)
       elif cmd=="gef":retval=(1 if float(command[1])>=float(command[2]) else 0)
-      elif cmd=="int":retval=int(float(command[1]))
+      elif cmd=="exp":retval=math.exp(float(command[1]))
+      elif cmd=="ln":retval=math.log(float(command[1]))
+      elif cmd=="sin":retval=math.sin(float(command[1]))
+      elif cmd=="asin":retval=math.asin(float(command[1]))
+      elif cmd=="int":retval=math.floor(float(command[1]))
       elif cmd=="if":
         if len(command)==3:
           if _istrue((output:=self._execute(command[1]))):

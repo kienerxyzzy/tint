@@ -1,0 +1,28 @@
+# {TINTMath - Official math library of TINT}
+# {TINT is a Tcl-like language focusing on minimalism, to the point where the interpreter fits in less than 200 lines of Python.}
+# {TINT exposes these math functions from Python:}
+# {exp, ln, sin, asin}
+# {In addition, the TINT int function rounds down, which is different from Python int().}
+
+set _pi 3.14159265358979
+set _halfpi [/f <_pi> 2]
+proc pow {x y} {exp [*f <y> [ln <x>]]}
+proc sqrt {x} {exp [/f [ln <x>] 2]}
+proc cbrt {x} {exp [/f [ln <x>] 3]}
+proc cos {x} {sin [+f <x> <_halfpi>]}
+proc tan {x} {/f [sin <x>] [cos <x>]}
+proc acos {x} {-f <_halfpi> [asin <x>]}
+# {atan(x) =asin(x/sqrt(1+x^2))}
+proc atan {x} {asin [/f <x> [sqrt [+f 1 [*f <x> <x>]]]]}
+proc sinh {x} {/f [-f [exp <x>] [exp [-f 0 <x>]]] 2}
+proc cosh {x} {/f [+f [exp <x>] [exp [-f 0 <x>]]] 2}
+proc tanh {x} {/f [sinh <x>] [cosh <x>]}
+# {asinh(x) =ln(x+sqrt(x^2+1))}
+proc asinh {x} {ln [+f <x> [sqrt [+f [*f <x> <x>] 1]]]}
+proc acosh {x} {ln [+f <x> [sqrt [-f [*f <x> <x>] 1]]]}
+# {atanh(x) =ln(1+x/1-x)/2}
+proc atanh {x} {/f [ln [/f [+f 1 <x>] [-f 1 <x>]]] 2}
+
+proc floor {x} {int <x>}
+proc ceil {x} {- 0 [int [-f 0 <x>]]}
+proc round {x} {int [+f <x> 0.5]}

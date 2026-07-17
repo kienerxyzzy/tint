@@ -1,9 +1,13 @@
+# {TINT is a programming language that is both semi-readable and simple (interpreter is less than 200 Python lines),}
+# {because of this, several corners had to be cut.}
+# {TINT 1.1 (which is this version) improves the scoping system and allows for proper recursion.}
+# (TINT 1.0 had recursion but the variables of the same function can get mixed up.) 
 proc recurse x {
     if {le <x> 0} {
         return a
     } else {
-        set t [recurse [sub <x> 1]]
-        return <t>[chr [add <x> [ord a]]]<t>
+        set t [recurse [- <x> 1]]
+        return <t>[chr [+ <x> [ord a]]]<t>
     }
 }
 puts (this is recursion test)
