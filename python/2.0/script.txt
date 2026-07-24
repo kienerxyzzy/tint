@@ -1,0 +1,28 @@
+# {TINT is a programming language that is both semi-readable and simple.}
+# {TINT has maintained a proud tradition of interpreters less than 200 lines of Python in every version.}
+# {TINT 2.0 brings the syntax a bit closer to Tcl.}
+proc gcd {x y} {
+    # {TINT 1.1 would have you write this condition as eq <y> 0.}
+    # {Now that we have an expr, we can make the condition easier to read.}
+    # {Also note the change in var access syntax from <x> to [$ x]. 
+       Doing this "frees up" the characters < and > for other uses within the interpreter.}
+    if {[$ y] == 0} {
+        return [$ x]
+    } else {
+        return [gcd [$ y] [expr [$ x] % [$ y]]]
+    }
+}
+puts (GCD of 35 and 50 is [gcd 35 50])
+# {A few notes on the new expr:}
+# {1. It doesn't respect precedence, like in Smalltalk:}
+puts [expr 1 + 2 * 3] # yields 9
+puts [expr 1 + [expr 2 * 3]] # yields 7
+# {2. It calls functions, allowing you to create your own operators:}
+puts [expr 5 gcd 10] # yields 5
+
+set e [chr 27][chr 91]
+# {that is ESC[ - the entry point for an ANSI escape code.}
+# {btw, TINT 2.0 fixed a bug where other braces would still look for their matching closure, even when inside an {}.}
+# {So this is fine: [([(}
+
+puts (Thanks for using [$ e]31mT[$ e]33mI[$ e]32mN[$ e]36mT[$ e]0m!)
