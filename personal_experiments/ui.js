@@ -1,0 +1,26 @@
+const id = (e) => {
+  return document.getElementById(e);
+};
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+let I = new Instance();
+I.customs["puts"] = async (e) => {
+  id("output").value += e.join(" ") + "\n";
+  await delay(100);
+};
+I.customs["gets"] = async (e) => {
+  let t = prompt(e.join(" ")) ?? "";
+  await delay(100);
+  return t;
+};
+I.customs["lit"] = (e) => {return e.join(" ")};
+id("run").addEventListener("click", async (e) => {
+  let a = new AbortController();
+  I.execute(id("code").value, a.signal).then((e) => {
+    if (e.status == TINT_ERR) {
+      id("output").value += `Error: ${e.result}\n`;
+    }
+  });
+});
+id("clear").addEventListener("click", (e) => {
+  id("output").value = "";
+});

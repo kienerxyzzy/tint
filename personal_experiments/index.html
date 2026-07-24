@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TINT in Javascript</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div class="user-interface">
+      <div class="code box">
+        <textarea
+          name="code"
+          id="code"
+          spellcheck="false"
+          autocorrect="false"
+          autocapitalize="off"
+          autocomplete="off"
+        ></textarea>
+      </div>
+      <div class="output box">
+        <textarea
+          name="output"
+          id="output"
+          disabled="true"
+          placeholder="Empty output"
+        ></textarea>
+      </div>
+      <div class="outbar box">
+        <div class="button" id="run">Run</div>
+        <div class="button" id="clear">Clear output</div>
+        <div class="button" id="write">Write to file</div>
+      </div>
+      <!--<div class="files box">
+        <div class="on button">HELLO.TXT</div>
+        <div class="button">RECURSE.TINT</div>
+      </div>
+      <div class="filebar box">
+        <div class="button" id="new">&plus;</div>
+        <div class="button" id="del">&cross;</div>
+        <div class="button" id="up">&uparrow;</div>
+        <div class="button" id="down">&downarrow;</div>
+        <div class="button" id="copy">copy</div>
+        <div class="button" id="copy">rename</div>
+        
+      </div>-->
+      <div class="scanlines"></div>
+    </div>
+  </body>
+  <script src="main.js"></script>
+  <script src="ui.js"></script>
+</html>

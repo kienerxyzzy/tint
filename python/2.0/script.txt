@@ -15,10 +15,10 @@ proc gcd {x y} {
 puts (GCD of 35 and 50 is [gcd 35 50])
 # {A few notes on the new expr:}
 # {1. It doesn't respect precedence, like in Smalltalk:}
-puts [expr 1 + 2 * 3] # yields 9
-puts [expr 1 + [expr 2 * 3]] # yields 7
+puts [expr 1 + 2 * 3];# yields 9
+puts [expr 1 + [expr 2 * 3]];# yields 7
 # {2. It calls functions, allowing you to create your own operators:}
-puts [expr 5 gcd 10] # yields 5
+puts [expr 5 gcd 10];# yields 5
 
 set e [chr 27][chr 91]
 # {that is ESC[ - the entry point for an ANSI escape code.}
