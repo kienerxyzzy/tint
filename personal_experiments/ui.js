@@ -12,14 +12,24 @@ I.customs["gets"] = async (e) => {
   await delay(100);
   return t;
 };
-I.customs["lit"] = (e) => {return e.join(" ")};
+I.customs["lit"] = (e) => {
+  return e.join(" ");
+};
+/**
+ *  @type {AbortController|null}
+ */
+let a = null;
 id("run").addEventListener("click", async (e) => {
-  let a = new AbortController();
+  a?.abort();
+  a = new AbortController();
   I.execute(id("code").value, a.signal).then((e) => {
     if (e.status == TINT_ERR) {
       id("output").value += `Error: ${e.result}\n`;
     }
   });
+});
+id("halt").addEventListener("click", (e) => {
+  a?.abort();
 });
 id("clear").addEventListener("click", (e) => {
   id("output").value = "";

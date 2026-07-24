@@ -1,8 +1,9 @@
 :root {
   --kule: gold;
+  --bg: black;
 }
 * {
-  font-family: "Modern DOS 9x16", "Fairfax Hax", monospace;
+  font-family: "Fairfax Hax", monospace;
 }
 .user-interface {
   display: grid;
@@ -36,7 +37,7 @@
   grid-area: 1 / 1 / 3 / 4;
 }
 .user-interface {
-  background-color: black;
+  background-color: var(--bg);
   color: var(--kule);
   box-sizing: border-box;
   height: 100%;
@@ -50,7 +51,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  background-color: black;
+  background-color: var(--bg);
 }
 .box {
   border: 1px solid var(--kule);
@@ -66,7 +67,7 @@ input[type="text"] {
 textarea,
 input[type="text"] {
   box-sizing: border-box;
-  background-color: black;
+  background-color: var(--bg);
   color: var(--kule);
 }
 textarea::placeholder {
@@ -78,7 +79,7 @@ textarea {
   height: 100%;
   border: none;
   resize: none;
-  scrollbar-color: var(--kule) #000;
+  scrollbar-color: var(--kule) var(--bg);
 }
 textarea:focus,
 input:focus {
@@ -86,7 +87,7 @@ input:focus {
 }
 .box::selection {
   background-color: var(--kule);
-  color: black;
+  color: var(--bg);
 }
 
 .scanlines {
@@ -123,7 +124,8 @@ input:focus {
 .filebar {
   user-select: none;
 }
-.button:hover,.on.button{
+.button:hover,
+.on.button {
   background-color: var(--kule);
-  color:black;
+  color: var(--bg);
 }

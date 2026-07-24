@@ -52,7 +52,7 @@ class Instance {
     if (sig.aborted) {
       throw new DOMException("Aborted", "AbortError");
     }
-    console.log(c);
+    //console.log(c);
     /**@type {String|null} */
     let res = null;
     let t;
@@ -179,7 +179,7 @@ class Instance {
           if (sig.aborted) {
             throw new DOMException("Aborted", "AbortError");
           }
-          t = await this.execute(c[1] ?? "", sig);
+          t = await this.execute("expr "+(c[1] ?? ""), sig);
           if (t.status == TINT_ERR) {
             return t;
           }
@@ -242,7 +242,7 @@ class Instance {
    * @returns {Promise<{result:String|null,status:Number}>}
    */
   async execute(S, sig) {
-    console.log(S);
+    //console.log(S);
     let bufstack = [""];
     let symstack = [];
     let cmd = [];
