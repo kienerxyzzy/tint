@@ -9,6 +9,14 @@
 function istrue(x) {
   return x.result != "0" && x.result != " ";
 }
+/**
+ *
+ * @param {String} x
+ * @returns {Boolean}
+ */
+function istrue2(x) {
+  return x != "0" && x != " ";
+}
 const TINT_OK = 0;
 const TINT_ERR = 1;
 const TINT_BREAK = 2;
@@ -105,6 +113,15 @@ class Instance {
         t = Number(c[1]) >= Number(c[2]);
         res = t ? "1" : "0";
         break;
+      case "&&":
+        res = istrue2(c[1]) && istrue2(c[2]) ? "1" : "0";
+        break;
+      case "||":
+        res = istrue2(c[1]) || istrue2(c[2]) ? "1" : "0";
+        break;
+      case "!":
+        res = istrue({ result: c[1], status: 0 }) ? "0" : "1";
+        break;
       case "<=":
         t = Number(c[1]) <= Number(c[2]);
         res = t ? "1" : "0";
@@ -137,7 +154,7 @@ class Instance {
         return { status: TINT_RETURN, result: c[1] ?? "" };
       case "if":
         if (c.length == 3) {
-          t = await this.execute("expr "+(c[1] ?? ""), sig);
+          t = await this.execute("expr " + (c[1] ?? ""), sig);
           if (t.status == TINT_ERR) {
             return t;
           }
@@ -150,7 +167,7 @@ class Instance {
         } else if ((c.length + 1) % 3 == 0) {
           let flag = true;
           for (let i = 1; i < c.length - 3; i += 3) {
-            t = await this.execute("expr "+(c[i] ?? ""), sig);
+            t = await this.execute("expr " + (c[i] ?? ""), sig);
             if (t.status == TINT_ERR) {
               return t;
             }
@@ -179,7 +196,7 @@ class Instance {
           if (sig.aborted) {
             throw new DOMException("Aborted", "AbortError");
           }
-          t = await this.execute("expr "+(c[1] ?? ""), sig);
+          t = await this.execute("expr " + (c[1] ?? ""), sig);
           if (t.status == TINT_ERR) {
             return t;
           }
@@ -203,14 +220,15 @@ class Instance {
         break;
       case "expr":
         t = c[1];
-        for (let i = 2; i < c.length; i+=2) {
+        for (let i = 2; i < c.length; i += 2) {
           let t2 = await this.run([c[i], t, c[i + 1]], sig);
           if (t2.status == TINT_ERR) {
             return t2;
           }
           t = t2.result ?? "";
         }
-        res = t;break;
+        res = t;
+        break;
       default:
         if (this.procedures[cmd]) {
           this.scope_stack.push({ ...this.variables });
@@ -228,7 +246,7 @@ class Instance {
           this.variables = { ...this.scope_stack.pop() };
         } else if (this.customs[cmd]) {
           let t = await this.customs[cmd](c.slice(1));
-          res = t??"";
+          res = t ?? "";
         } else {
           return { status: TINT_ERR, result: `Nonexistent command ${cmd}!` };
         }
@@ -250,7 +268,7 @@ class Instance {
     let curly = 0;
     let temp;
     let output;
-    let cmt=false
+    let cmt = false;
     const code = S + "\n";
     for (let i = 0; i < code.length; i++) {
       if (sig.aborted) {

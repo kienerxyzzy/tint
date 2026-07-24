@@ -32,5 +32,6 @@ id("halt").addEventListener("click", (e) => {
   a?.abort();
 });
 id("clear").addEventListener("click", (e) => {
+  a?.abort();
   id("output").value = "";
 });

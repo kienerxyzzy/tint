@@ -1,9 +1,9 @@
 :root {
-  --kule: gold;
+  --kule: cyan;
   --bg: black;
 }
 * {
-  font-family: "Fairfax Hax", monospace;
+  font-family: "Stray","hooge 05_55", monospace;
 }
 .user-interface {
   display: grid;
@@ -57,10 +57,6 @@ body {
   border: 1px solid var(--kule);
   padding: 10px;
 }
-input[type="text"] {
-  border: 1px solid var(--kule);
-  padding: 10px;
-}
 .actions input {
   margin-top: 10px;
 }
@@ -69,6 +65,10 @@ input[type="text"] {
   box-sizing: border-box;
   background-color: var(--bg);
   color: var(--kule);
+  
+}
+textarea,.button{
+  text-transform: uppercase;
 }
 textarea::placeholder {
   color: var(--kule);
