@@ -16,7 +16,7 @@ print(
   {colors["c0"]}█      {colors["c1"]}█            {colors["c2"]}█ █ █    {colors["c3"]}█
   {colors["c0"]}█      {colors["c1"]}█            {colors["c2"]}█  ██    {colors["c3"]}█
   {colors["c0"]}█{colors["c1"]}I{colors["c2"]}N{colors["c3"]}T {colors["c1"]}█████S (still) {colors["c2"]}█   █OT  {colors["c3"]}█CL
-{tint} REPL, Version 2.0
+{tint} REPL, Version 2.1
 Developed by {colors["name"]}KCN-037/Stonkalyasatone/N.P.Kien{reset}. in \033[41m\033[33m * {reset} Vietnam.
 {tint} is a simplified variant of Tcl that allows it's interpreter to fit in under 200 lines of Python.
 \033[1mDon't believe me? Count how many lines there are in main.py.{reset}
@@ -47,10 +47,9 @@ while True:
     except SyntaxError as e:
         print(f"{colors["err"]}Syntax error: {str(e)}{reset}")
     except AssertionError as e:
-            print(f"Internal error, pls report to dev: {str(e)}")
+        print(f"Internal error, pls report to dev: {str(e)}")
     except KeyboardInterrupt:
         print("\nbye")
         break
     except Exception as e:
         print(f"{colors["err"]}Error: {str(e)}{reset}")
-    

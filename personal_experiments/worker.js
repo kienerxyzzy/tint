@@ -39,13 +39,9 @@ class Instance {
   /**
    * Executes a TINT command. FOR INTERNAL USE ONLY!
    * @param {Array<String>} c A command to run.
-   * @param {AbortSignal} sig
    * @returns {Promise<{result:String|null,status:Number}>}
    */
-  async run(c, sig) {
-    if (sig.aborted) {
-      throw new DOMException("Aborted", "AbortError");
-    }
+  async run(c) {
     //console.log(c);
     /**@type {String|null} */
     let res = null;
@@ -146,12 +142,12 @@ class Instance {
         return { status: TINT_RETURN, result: c[1] ?? "" };
       case "if":
         if (c.length == 3) {
-          t = await this.execute("expr " + (c[1] ?? ""), sig);
+          t = await this.execute("expr " + (c[1] ?? ""));
           if (t.status == TINT_ERR) {
             return t;
           }
           if (istrue(t)) {
-            t = await this.execute(c[2] ?? "", sig);
+            t = await this.execute(c[2] ?? "");
             if (t.status != TINT_OK) {
               return t;
             }
@@ -159,12 +155,12 @@ class Instance {
         } else if ((c.length + 1) % 3 == 0) {
           let flag = true;
           for (let i = 1; i < c.length - 3; i += 3) {
-            t = await this.execute("expr " + (c[i] ?? ""), sig);
+            t = await this.execute("expr " + (c[i] ?? ""));
             if (t.status == TINT_ERR) {
               return t;
             }
             if (istrue(t)) {
-              t = await this.execute(c[i + 1] ?? "", sig);
+              t = await this.execute(c[i + 1] ?? "");
               if (t.status != TINT_OK) {
                 return t;
               }
@@ -173,7 +169,7 @@ class Instance {
             }
           }
           if (flag) {
-            t = await this.execute(c[c.length - 1] ?? "", sig);
+            t = await this.execute(c[c.length - 1] ?? "");
             //console.log("ELSE",t)
             if (t.status != TINT_OK) {
               return t;
@@ -185,17 +181,14 @@ class Instance {
         break;
       case "while":
         while (1) {
-          if (sig.aborted) {
-            throw new DOMException("Aborted", "AbortError");
-          }
-          t = await this.execute("expr " + (c[1] ?? ""), sig);
+          t = await this.execute("expr " + (c[1] ?? ""));
           if (t.status == TINT_ERR) {
             return t;
           }
           if (!istrue(t)) {
             break;
           }
-          t = await this.execute(c[2] ?? "", sig);
+          t = await this.execute(c[2] ?? "");
           if (t.status == TINT_ERR) {
             return t;
           } else if (t.status == TINT_BREAK) {
@@ -223,7 +216,7 @@ class Instance {
         t = c[1];
         let t2;
         for (let i = 2; i < c.length; i += 2) {
-          t2 = await this.run([c[i], t, c[i + 1]], sig);
+          t2 = await this.run([c[i], t, c[i + 1]]);
           if (t2.status == TINT_ERR) {
             return t2;
           }
@@ -239,7 +232,7 @@ class Instance {
           for (let i = 0; i < t.length; i++) {
             this.variables[t[i]] = c[i + 1];
           }
-          t = await this.execute(this.procedures[cmd].body, sig);
+          t = await this.execute(this.procedures[cmd].body);
           if (t.status == TINT_ERR) {
             return t;
           }
@@ -258,10 +251,9 @@ class Instance {
   /**
    * Executes a TINT script. FOR INTERNAL USE ONLY!
    * @param {String} S A script to execute.
-   * @param {AbortSignal} sig
    * @returns {Promise<{result:String|null,status:Number}>}
    */
-  async execute(S, sig) {
+  async execute(S) {
     //console.log(S);
     let bufstack = [""];
     let symstack = [];
@@ -273,9 +265,6 @@ class Instance {
     let cmt = false;
     const code = S + "\n";
     for (let i = 0; i < code.length; i++) {
-      if (sig.aborted) {
-        throw new DOMException("Aborted", "AbortError");
-      }
       let c = code[i];
       if ((c == "[" || c == "(") && curly == 0) {
         symstack.push(c);
@@ -319,7 +308,7 @@ class Instance {
         }
         temp = bufstack.pop();
         if (temp !== undefined) {
-          output = await this.execute(temp, sig);
+          output = await this.execute(temp);
           if (output.status != TINT_OK) {
             return output;
           }
@@ -362,7 +351,7 @@ class Instance {
         }
         //console.log(cmd);
         if (cmd.length != 0) {
-          output = await this.run(cmd, sig);
+          output = await this.run(cmd);
           //console.log(cmd,"->",output)
           if (output.status != TINT_OK) {
             return output;
@@ -382,3 +371,25 @@ class Instance {
     return { status: TINT_OK, result: res };
   }
 }
+/**
+ *
+ * @param {Number} ms
+ * @returns
+ */
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+self.onmessage = async (e) => {
+  //console.log("Running!",e.data);
+  let I = new Instance();
+  /** @param {Array<String>} e */
+  I.customs["puts"] = async (e) => {
+    self.postMessage({ data: e.join(" "), done: false });
+    await delay(100);
+  };
+  /** @param {Array<String>} e */
+  I.customs["#"] = (e) => {
+    return e.join(" ");
+  };
+  let r = await I.execute(e.data ?? "");
+  self.postMessage({ data: r, done: true });
+  self.close();
+};

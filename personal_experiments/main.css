@@ -1,14 +1,13 @@
 :root {
-  --kule: orange;
+  --kule: cyan;
   --bg: black;
 }
 * {
   font-family: "Fairfax Hax", monospace;
-  font-weight: bold;
 }
 .user-interface {
   display: grid;
-  grid-template-columns: 0fr 1fr 1fr;
+  grid-template-columns: 0fr 2fr 1fr;
   grid-template-rows: 0.3fr 1.7fr;
   gap: 10px 10px;
   grid-auto-flow: row;
@@ -66,7 +65,6 @@ input[type="text"] {
   box-sizing: border-box;
   background-color: var(--bg);
   color: var(--kule);
-  
 }
 textarea::placeholder {
   color: var(--kule);
@@ -111,7 +109,6 @@ input:focus {
   user-select: none;
   cursor: pointer;
 }
-.outbar .button,
 .filebar .button {
   outline: 1px solid var(--kule);
   width: fit-content;
@@ -126,4 +123,9 @@ input:focus {
 .on.button {
   background-color: var(--kule);
   color: var(--bg);
+}
+.outbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

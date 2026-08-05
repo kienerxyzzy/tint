@@ -12,6 +12,13 @@ class Instance:
     self.globals=dict()
     self.vstack=[]
   def _expr(self,expression: list[str]):
+    for i in range(len(expression)):
+      term=expression[i]
+      if len(term)>0 and term[0]=="$":
+        if len(term)>1 and term[1]=="_":
+          expression[i]=self.globals[term[2:]]
+        else:
+          expression[i]=self.variables[term[1:]]
     temp=expression[0]
     for i in range(1,len(expression),2):
       temp=self._run([expression[i],temp,expression[i+1]])[1]

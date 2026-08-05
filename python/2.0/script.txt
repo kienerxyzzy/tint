@@ -1,15 +1,16 @@
 # {TINT is a programming language that is both semi-readable and simple.}
 # {TINT has maintained a proud tradition of interpreters less than 200 lines of Python in every version.}
 # {TINT 2.0 brings the syntax a bit closer to Tcl.}
+# {Update: TINT 2.1 makes the variable access syntax even closer, but it only works within expr}
 proc gcd {x y} {
     # {TINT 1.1 would have you write this condition as eq <y> 0.}
     # {Now that we have an expr, we can make the condition easier to read.}
-    # {Also note the change in var access syntax from <x> to [$ x]. 
+    # {Also note the change in var access syntax from <x> to [$ x] (outside expr) and $x (inside expr). 
        Doing this "frees up" the characters < and > for other uses within the interpreter.}
-    if {[$ y] == 0} {
+    if {$y == 0} {
         return [$ x]
     } else {
-        return [gcd [$ y] [expr [$ x] % [$ y]]]
+        return [gcd [$ y] [expr $x % $y]]
     }
 }
 puts (GCD of 35 and 50 is [gcd 35 50])
