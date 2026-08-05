@@ -20,8 +20,13 @@ I.customs["lit"] = (e) => {
  */
 let a = null;
 id("run").addEventListener("click", async (e) => {
+  id("output").value = "";
   a?.abort();
   a = new AbortController();
+  I.variables = {};
+  I.globals = {};
+  I.procedures = {};
+  I.scope_stack = [];
   I.execute(id("code").value, a.signal).then((e) => {
     if (e.status == TINT_ERR) {
       id("output").value += `Error: ${e.result}\n`;
@@ -30,8 +35,4 @@ id("run").addEventListener("click", async (e) => {
 });
 id("halt").addEventListener("click", (e) => {
   a?.abort();
-});
-id("clear").addEventListener("click", (e) => {
-  a?.abort();
-  id("output").value = "";
 });

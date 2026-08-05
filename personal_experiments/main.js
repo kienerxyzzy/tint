@@ -35,20 +35,6 @@ class Instance {
     this.customs = {};
     /** @type {Array<Record<string, string>>} */
     this.scope_stack = [];
-    this.running = false;
-  }
-  reset() {
-    /** @type {Record<string, string>} */
-    this.variables = {};
-    /** @type {Record<string, string>} */
-    this.globals = {};
-    /** @type {Record<string, {args:Array<string>,body:String}>} */
-    this.procedures = {};
-    /** @type {Record<string, Function>} */
-    this.customs = {};
-    /** @type {Array<Record<string, string>>} */
-    this.scope_stack = [];
-    this.running = false;
   }
   /**
    * Executes a TINT command. FOR INTERNAL USE ONLY!
@@ -74,6 +60,12 @@ class Instance {
         break;
       case "$_":
         res = this.globals[c[1]] ?? "";
+        break;
+      case "?":
+        res = (this.variables[c[1]]!==undefined) ? "1" : "0";
+        break;
+      case "?_":
+        res = (this.globals[c[1]]!==undefined) ? "1" : "0";
         break;
       case "set":
         this.variables[c[1]] = c[2] ?? "";

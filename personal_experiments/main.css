@@ -1,9 +1,10 @@
 :root {
-  --kule: cyan;
+  --kule: orange;
   --bg: black;
 }
 * {
-  font-family: "Stray","hooge 05_55", monospace;
+  font-family: "Fairfax Hax", monospace;
+  font-weight: bold;
 }
 .user-interface {
   display: grid;
@@ -66,9 +67,6 @@ input[type="text"] {
   background-color: var(--bg);
   color: var(--kule);
   
-}
-textarea,.button{
-  text-transform: uppercase;
 }
 textarea::placeholder {
   color: var(--kule);
