@@ -1,0 +1,45 @@
+proc // {} {}
+// {TINT 2.0 kinda adds the $var syntax from Tcl,}
+// {and adds an expr command (that evaluates from left to right, like Smalltalk)}
+// {The $var syntax only works in expr-related commands, including ifs and whiles.}
+// {Remarkably, the Python interpreter has stayed below 200 lines.}
+// {This version only works on Python, as it's the version that needs you to explicitly specify floating-point ops.}
+// {while the JS version uses JS numbers which are 64-bit floats, therefore no specification is needed.}
+// {There is an exp command, but where's the fun in that?}
+set_ euler 2.718281828459045
+set_ delta 1e-9
+proc sqrt {x} {
+  set a [$ x]
+  set b 1000
+  while {$b >=f [$_ delta]} {
+    set b [expr [expr $a *f $a -f $x] /f [expr 2 *f $a]]
+    set a [expr $a -f $b]
+  }
+  return [$ a]
+}
+proc sexp {x} {
+  set t 1
+  set c [$_ euler]
+  set result 1
+  while {$t <=f $x} {
+    set t [expr $t *f 2]
+    set c [expr $c *f $c]
+  }
+  while {$x >=f [$_ delta]} {
+    if {$t <=f $x} {
+      set x [expr $x -f $t]
+      set result [expr $result *f $c]
+    }
+    set t [expr $t /f 2]
+    if {$t == 1} {
+      set c [$_ euler]
+    } else {
+      set c [sqrt [$ c]]
+    }
+  }
+  return [$ result]
+}
+
+set result [sexp 3.6]
+set expected [exp 3.6]
+puts (Computed: [$ result] Actual: [$ expected] Delta: [expr $expected -f $result])

@@ -1,9 +1,18 @@
 :root {
-  --kule: cyan;
+  --kule: orange;
   --bg: black;
+}
+.user-interface * {
+  text-shadow: 0px 0px 3px var(--kule);
+}
+.box {
+  box-shadow:
+    0px 0px 3px 0px var(--kule),
+    inset 0px 0px 3px 0px var(--kule);
 }
 * {
   font-family: "Fairfax Hax", monospace;
+  font-weight: 100;
 }
 .user-interface {
   display: grid;
@@ -42,10 +51,7 @@
   box-sizing: border-box;
   height: 100%;
   padding: 10px;
-  animation: scanlines 20ms steps(3) infinite;
-}
-.user-interface * {
-  text-shadow: 0px 0px 2px var(--kule);
+  animation: scanlines 10ms steps(2) infinite;
 }
 body {
   margin: 0;
@@ -76,6 +82,7 @@ textarea {
   border: none;
   resize: none;
   scrollbar-color: var(--kule) var(--bg);
+  text-overflow: ellipsis;
 }
 textarea:focus,
 input:focus {
@@ -89,10 +96,11 @@ input:focus {
 .scanlines {
   background: repeating-linear-gradient(
     transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.25) 1px,
-    rgba(0, 0, 0, 0.25) 3px
+    transparent 1px,
+    var(--bg) 1px,
+    var(--bg) 2px
   );
+  opacity: 15%;
   pointer-events: none;
 }
 @keyframes scanlines {

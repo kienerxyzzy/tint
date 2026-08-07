@@ -207,9 +207,9 @@ class Instance {
         for (let i = 0; i < c.length; i++) {
           if (c[i].at(0) === "$") {
             if (c[i].at(1) === "_") {
-              c[i] = this.globals[c[i].slice(2)];
+              c[i] = this.globals[c[i].slice(2)] ?? "";
             } else {
-              c[i] = this.variables[c[i].slice(1)];
+              c[i] = this.variables[c[i].slice(1)] ?? "";
             }
           }
         }
@@ -387,7 +387,7 @@ self.onmessage = async (e) => {
   };
   /** @param {Array<String>} e */
   I.customs["#"] = (e) => {
-    return e.join(" ");
+    return "";
   };
   let r = await I.execute(e.data ?? "");
   self.postMessage({ data: r, done: true });
