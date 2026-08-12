@@ -15,23 +15,22 @@ class Instance:
     for i in range(len(expression)):
       term=expression[i]
       if len(term)>0 and term[0]=="$":
-        if len(term)>1 and term[1]=="_":
-          expression[i]=self.globals[term[2:]]
-        else:
-          expression[i]=self.variables[term[1:]]
+        if len(term)>1 and term[1]=="_":expression[i]=self.globals[term[2:]]
+        else:expression[i]=self.variables[term[1:]]
     temp=expression[0]
     for i in range(1,len(expression),2):
       temp=self._run([expression[i],temp,expression[i+1]])[1]
       assert type(temp)==str
     return temp
   def _run(self,command: list[str]):
-    #print(command)
     retval=""
     if len(command)==0:return [0,None]
     else:
       cmd=command[0]
-      #other stuff
       if cmd=="#":return [0,None]
+      elif cmd=="import":
+        with open(command[1]) as f:
+          self.execute(f.read())
       elif cmd=="puts":print(command[1])
       elif cmd=="gets":retval=input(command[1])
       elif cmd=="lit":retval=command[1]
@@ -50,12 +49,10 @@ class Instance:
       elif cmd==">=":retval=(1 if int(command[1])>=int(command[2]) else 0)
       elif cmd=="==":retval=(1 if command[1]==command[2] else 0)
       elif cmd=="!=":retval=(1 if command[1]!=command[2] else 0)
-      #stringies
       elif cmd=="chr":retval=chr(int(command[1]))
       elif cmd=="ord":retval=ord(command[1])
       elif cmd=="len":retval=len(command[1])
       elif cmd=="index":retval=command[1][int(command[2])]
-      #floating pointies
       elif cmd=="+f":retval=sum([float(i) for i in command[1:]])
       elif cmd=="-f":retval=float(command[1])-float(command[2])
       elif cmd=="*f":retval=float(command[1])*float(command[2])
@@ -87,15 +84,11 @@ class Instance:
           if flag:
             output=self._execute(command[-1])
             if output[0]!=0:return output
-      elif cmd=="break":
-        return [2,""]
-      elif cmd=="continue":
-        return [3,""]
+      elif cmd=="break":return [2,""]
+      elif cmd=="continue":return [3,""]
       elif cmd=="return":
-        if len(command)==1:
-          return [4,""]
-        else:
-          return [4,command[1]]
+        if len(command)==1:return [4,""]
+        else:return [4,command[1]]
       elif cmd=="while":
         while _istrue(self._execute("expr "+command[1])):
           output=self._execute(command[2])
@@ -110,10 +103,14 @@ class Instance:
           elif output[0]==3:continue
           elif output[0]==0:pass
           else: return output
-      elif cmd=="proc":
-        self.procedures[command[1]]=(command[2],command[3])
-      elif cmd=="expr":
-        retval=self._expr(command[1:])
+      elif cmd=="proc":self.procedures[command[1]]=(command[2],command[3])
+      elif cmd=="expr":retval=self._expr(command[1:])
+      elif cmd=="uplevel":
+        temp=self.variables.copy()
+        self.variables=self.vstack.pop().copy()
+        self._execute(command[1])
+        self.vstack.append(self.variables.copy())
+        self.variables=temp.copy()
       elif cmd in self.procedures:
         self.vstack.append(self.variables.copy())
         self.variables.clear()
@@ -127,11 +124,8 @@ class Instance:
         retval=output[1]
       else:
         raise Exception(f"Nonexistent command {cmd}!")
-    #print("->",retval)
     return [0,str(retval)]         
   def _execute(self,S: str):
-    #print("exec",S)
-    #print(S)
     buffer_stack=[""]
     symbol_stack=[]
     command=[]
@@ -145,16 +139,16 @@ class Instance:
     for c in S+"\n":
       assert len(symbol_stack)+1==len(buffer_stack)
       if c=="{":
-              symbol_stack.append(c)
-              buffer_stack.append("")
-              curly_mode+=1
+        symbol_stack.append(c)
+        buffer_stack.append("")
+        curly_mode+=1
       elif c in "[(" and curly_mode==0:
         symbol_stack.append(c)
         buffer_stack.append("")
       elif c=="}":
         temp=close_brace("{","}")
         curly_mode-=1
-        if len(symbol_stack)==0:
+        if curly_mode==0:
           buffer_stack[-1]+=temp
         else:
           buffer_stack[-1]+="{"+temp+"}"

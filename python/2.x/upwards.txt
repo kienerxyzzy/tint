@@ -1,0 +1,26 @@
+# {TINT 2.1 adds the uplevel command. (Upvar is not needed)}
+# {Interpreter is still below 200 Python lines.}
+# {Underscore-commands denote globals.}
+set_ LBRACE [chr 123]
+set_ MBRACE ([chr 125] [chr 123])
+set_ RBRACE [chr 125]
+proc for {x y z t} {
+    uplevel (
+        [$ x];
+        while [$_ LBRACE][$ y][$_ MBRACE][$ t];[$ z][$_ RBRACE]
+    )
+}
+
+proc ++ {x} {
+    # {Here it translates to "set i [+ [$ i] 1]"}
+    # {There is an expr command, but this is a tad faster.}
+    # {Also expr is the only command that somewhat parses $var syntax.}
+    # {Other commands must use [$ var] as a workaround.}
+    uplevel ({set }[$ x]{ [+ [$ }[$ x]{] 1]})
+}
+
+set limit 10
+
+for {set i 1} {$i <= $limit} {++ i} {
+    puts [$ i]
+}

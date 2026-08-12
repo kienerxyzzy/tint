@@ -21,7 +21,7 @@ puts [expr 1 + [expr 2 * 3]];# yields 7
 # {2. It calls functions, allowing you to create your own operators:}
 puts [expr 5 gcd 10];# yields 5
 
-set e [chr 27][chr 91]
+set e [chr 27]{[}
 # {that is ESC[ - the entry point for an ANSI escape code.}
 # {btw, TINT 2.0 fixed a bug where other braces would still look for their matching closure, even when inside an {}.}
 # {So this is fine: [([(}
