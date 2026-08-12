@@ -1,26 +1,25 @@
-# {TINT 2.1 adds the uplevel command. (Upvar is not needed)}
+# {TINT 2.1 adds the uplevel command. (Upvar is not needed as you can simulate functions with uplevel.)}
 # {Interpreter is still below 200 Python lines.}
+
 # {Underscore-commands denote globals.}
-set_ LBRACE [chr 123]
-set_ MBRACE ([chr 125] [chr 123])
-set_ RBRACE [chr 125]
+# {Also backslashes don't exist so you have to do this:}
+proc \ {x} {return [chr [$ x]]}
 proc for {x y z t} {
+    # {It is required that you construct the entire script before passing it to uplevel.}
     uplevel (
-        [$ x];
-        while [$_ LBRACE][$ y][$_ MBRACE][$ t];[$ z][$_ RBRACE]
+        [$ x]
+        while [\ 123][$ y][\ 125] [\ 123][$ t];[$ z][\ 125]
     )
 }
-
-proc ++ {x} {
+proc incr {x} {
     # {Here it translates to "set i [+ [$ i] 1]"}
     # {There is an expr command, but this is a tad faster.}
-    # {Also expr is the only command that somewhat parses $var syntax.}
-    # {Other commands must use [$ var] as a workaround.}
     uplevel ({set }[$ x]{ [+ [$ }[$ x]{] 1]})
 }
-
-set limit 10
-
-for {set i 1} {$i <= $limit} {++ i} {
-    puts [$ i]
+set limit 5
+# {You can use $var syntax here because the condition field is handled using expr,}
+# {which automatically subs in $var notation.}
+# {Note the spacing between the tokens, those are NOT optional.}
+for {set i 1} {$i <= $limit} {incr i} {
+    puts (counting to [$ i])
 }
