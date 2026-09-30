@@ -1,0 +1,38 @@
+function # {return}
+# {ACAT stands for ACAT Clearly Ain't Tcl.}
+# {It's based on TINT (TINT Is Not Tcl),}
+# {which was itself based on Tcl.}
+# {Currently, the interpreter sits below 150 lines of Python, which is actually smaller than TINT!}
+function for {
+  assert ($# == 4) {WRONG NUMBER OF ARGUMENTS}
+  set O [chr 123]
+  set C [chr 125]
+  uplevel {
+    [}($0){]
+    while }($O)($1)($C){ }($O)($3){;}($2)($C){
+  }
+}
+function ++ {
+  uplevel {
+    set }($0){ ($}($0){ + 1)
+  }
+}
+set limit (2 * (1 + 2 * 2));# {Evaluates to 12, since ACAT also evaluates left-to-right like TINT.}
+# {Specifically, it resolves to (2*((1+2)*2))}
+for {set i 1} {$i <= $limit} {++ i} {
+  print ($i)
+}
+print {COUNTING UP FROM 1 TO }($limit)
+set number 36
+print {I AM THINKING OF NUMBER BETWEEN 1 AND 100}
+while {1} {
+  set guess [input >>>]
+  if {$guess > $number} {
+    print BELOW!
+  } elif {$guess < $number} {
+    print ABOVE!
+  } else {
+    print CORRECT!
+    break
+  }
+}
